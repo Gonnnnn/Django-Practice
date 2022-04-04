@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hello World!</title>
+  </head>
+
+  <body>
+    {% load socialaccount %}
+    <a href="{% provider_login_url 'google' %}">구글 로그인</a>
+    <a href="{% url 'sociallogin' %}">소셜 로그인</a>
+  </body>
+</html>

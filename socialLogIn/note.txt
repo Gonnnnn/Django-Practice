@@ -1,0 +1,38 @@
+**dj_rest_auth**
+
+- dj_rest_auth.registration을 사용할 때 registration에 들어가야할 사항을 커스터마이징 하는 법 → [링크](https://stackoverflow.com/questions/36910373/django-rest-auth-allauth-registration-with-email-first-and-last-name-and-witho)
+
+**allauth**
+
+dj_rest_auth.registration이 의존한다.
+
+[기본 contrib.auth와 allauth의 비교](https://programmers-sosin.tistory.com/entry/Django-%EC%9E%A5%EA%B3%A0-%EC%9C%A0%EC%A0%80-%EA%B8%B0%EB%8A%A5-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0-1-allauth%EC%99%80-contribauth%EC%9D%98-%EC%B0%A8%EC%9D%B4?category=1063620)
+
+- [공식 문서](https://django-allauth.readthedocs.io/en/latest/index.html)
+- [wikidocs](https://wikidocs.net/9942)
+- django-social-auth/python-social-auth → deprecated
+- social-auth-app-django도 쓰인다. 얘는 django-registration과 결합하여 쓸 수 있지만 **allauth는 all-in-one이다**
+- 소셜 로그인 지원, 기본 로그인, 로그아웃 회원가입 가능(view 지원)
+- sns 공급자가 제공하는 부정확한 정보(인증 받지 않은 이메일 주솓 ㅡㅇ)에 대해 **로그인 연동 과정에서 정확한 입력 요구 가능**
+- django **기존 사용자의 경우에도** /accounts/social/connections/ 경로에서 **소셜 로그인 계정 연동 가능**
+- 'django.contrib.sites' 에 의존한다. INSTALLED_APPS에 추가해야함
+
+**allauth.account**
+
+- db 제공. INSTALLED_APPS에 추가시 admin에서 accounts라는 테이블이 생선 된 것을 볼 수 있다.
+- 다른 기능도 제공할..듯 잘 모름 당연히 하겠지
+
+**allauth.socialaccount**
+
+- social login 관련 기능 제공
+- social app을 설정해줄 필요가 있다. 이건 구글링하면 매우 쉽게 나옴
+
+------------------------------------------------------------
+
+1. social app을 설정해주는 것, google에서 OAuth2.0에 따라 access token을 받아오는 view 생성 해야함
+2. dj_rest_auth를 써서 sign up을 할 때 필요한 정보를 받아오기 위해서는 serializer을 커스터마이징 해야함
+    -> user manager을 커스텀해서 만들어줬었다. 여기서 first_name, last_name이 필요하도록 했었었다.
+         얘는 superuser create할 때는 잘 적용됐는데, dj-rest-auth.registration으로 보내버리는 url에서는
+         적용이 안되더라. serializer을 커스터마이징 해줘야했던거였다.
+    -> allauth.account config관련에서 signup부분에 어떤 form을 쓸건지를 지정하는 부분도 있는데, 이것도 안먹혔음.
+        dj-rest-auth가 allauth.account에 의존하지는 않나보다.
